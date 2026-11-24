@@ -1,6 +1,7 @@
 import type { Metadata } from 'next/types'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { SectionHeading } from '@/components/Notebook/SectionHeading'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
@@ -20,21 +21,26 @@ export default async function Page() {
     depth: 1,
     limit: 12,
     overrideAccess: false,
+    sort: '-publishedAt',
     select: {
       title: true,
       slug: true,
       categories: true,
       meta: true,
+      publishedAt: true,
     },
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-14 pb-28">
       <PageClient />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Blog</h1>
-        </div>
+      <div className="container mb-12">
+        <SectionHeading
+          as="h1"
+          fig="Page 04 — Blog"
+          note="field notes, recaps & how-tos"
+          title="The notebook."
+        />
       </div>
 
       <div className="container mb-8">

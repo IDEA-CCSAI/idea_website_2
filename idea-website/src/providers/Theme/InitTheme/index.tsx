@@ -10,6 +10,9 @@ export const InitTheme: React.FC = () => {
       dangerouslySetInnerHTML={{
         __html: `
   (function () {
+    // Flag for CSS: enables the sketch-to-ink scroll reveal only when JS runs
+    document.documentElement.classList.add('js')
+
     function getImplicitPreference() {
       var mediaQuery = '(prefers-color-scheme: dark)'
       var mql = window.matchMedia(mediaQuery)

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next/types'
 
 import { CollectionArchive } from '@/components/CollectionArchive'
+import { SectionHeading } from '@/components/Notebook/SectionHeading'
 import { PageRange } from '@/components/PageRange'
 import { Pagination } from '@/components/Pagination'
 import configPromise from '@payload-config'
@@ -32,15 +33,18 @@ export default async function Page({ params: paramsPromise }: Args) {
     limit: 12,
     page: sanitizedPageNumber,
     overrideAccess: false,
+    sort: '-publishedAt',
   })
 
   return (
-    <div className="pt-24 pb-24">
+    <div className="pt-14 pb-28">
       <PageClient />
-      <div className="container mb-16">
-        <div className="prose dark:prose-invert max-w-none">
-          <h1>Posts</h1>
-        </div>
+      <div className="container mb-12">
+        <SectionHeading
+          as="h1"
+          fig={`Page 04 — Blog · Sheet ${sanitizedPageNumber}`}
+          title="The notebook."
+        />
       </div>
 
       <div className="container mb-8">

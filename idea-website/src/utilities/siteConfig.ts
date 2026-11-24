@@ -5,6 +5,8 @@ export const SITE_DESCRIPTION = 'We innovate, grow, and unite as one. Skills | N
 export const INSTAGRAM_URL = 'https://www.instagram.com/idea_ccsai/'
 export const INSTAGRAM_HANDLE = '@idea_ccsai'
 export const CONTACT_EMAIL = 'idea.ccsai@gmail.com'
+// Event times are shown in this timezone
+export const SITE_TIMEZONE = 'America/Toronto'
 
 export const NAV_LINKS = [
   { href: '/', label: 'Home' },

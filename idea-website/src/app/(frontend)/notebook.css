@@ -1,0 +1,372 @@
+/* =====================================================================
+   IDEA "Lab Notebook" theme
+   Light = graph-paper notebook. Dark = blueprint.
+   All colours live here as tokens. Tweak these first.
+   ===================================================================== */
+
+:root {
+  --paper: #f6f3ea;
+  --paper-2: #fcfaf4;
+  --ink: #24272d;
+  --ink-soft: #5d6472;
+  --grid: rgb(59 110 190 / 0.1);
+  --grid-major: rgb(59 110 190 / 0.2);
+  --blueprint: #2a5db0;
+  --hl: #ffe45c;
+  --margin-line: rgb(214 69 69 / 0.45);
+  --note-1: #fff3a3;
+  --note-2: #ffd3df;
+  --note-3: #cfe6ff;
+  --note-4: #d6f4c9;
+  --note-ink: #24272d;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-2);
+  --card-foreground: var(--ink);
+  --popover: var(--paper-2);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --muted-foreground: var(--ink-soft);
+  --border: rgb(36 39 45 / 0.18);
+  --input: rgb(36 39 45 / 0.25);
+}
+
+[data-theme='dark'] {
+  --paper: #0f2b52;
+  --paper-2: #13355f;
+  --ink: #eaf2ff;
+  --ink-soft: #a6bfe4;
+  --grid: rgb(255 255 255 / 0.06);
+  --grid-major: rgb(255 255 255 / 0.13);
+  --blueprint: #8fc1ff;
+  --hl: #ffd84a;
+  --margin-line: rgb(255 130 130 / 0.35);
+  --note-1: #f5e48c;
+  --note-2: #f2bfcd;
+  --note-3: #bcd8f5;
+  --note-4: #c6e6b8;
+
+  --background: var(--paper);
+  --foreground: var(--ink);
+  --card: var(--paper-2);
+  --card-foreground: var(--ink);
+  --popover: var(--paper-2);
+  --popover-foreground: var(--ink);
+  --primary: var(--ink);
+  --primary-foreground: var(--paper);
+  --muted-foreground: var(--ink-soft);
+  --border: rgb(234 242 255 / 0.2);
+  --input: rgb(234 242 255 / 0.28);
+}
+
+/* Graph paper */
+body {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size:
+    120px 120px,
+    120px 120px,
+    24px 24px,
+    24px 24px;
+  background-position: -1px -1px;
+}
+
+/* Red notebook margin line (tablet and up) */
+body::before {
+  content: '';
+  position: fixed;
+  inset-block: 0;
+  left: 0.9rem;
+  width: 4px;
+  border-inline: 1px solid var(--margin-line);
+  pointer-events: none;
+  z-index: 0;
+  display: none;
+}
+@media (width >= 48rem) {
+  body::before {
+    display: block;
+  }
+}
+
+::selection {
+  background: var(--hl);
+  color: #1d1f24;
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-space-grotesk), var(--font-geist-sans), sans-serif;
+  }
+  .font-hand {
+    font-family: var(--font-caveat), cursive;
+  }
+
+  /* Small technical label: "FIG. 01", "ENTRY 03" */
+  .label {
+    font-family: var(--font-plex-mono), monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  /* Highlighter marker */
+  .hl {
+    color: #1d1f24;
+    padding-inline: 0.15em;
+    margin-inline: -0.05em;
+    background-image: linear-gradient(
+      100deg,
+      transparent 0.3em,
+      var(--hl) 0.45em,
+      var(--hl) calc(100% - 0.3em),
+      transparent 100%
+    );
+    background-repeat: no-repeat;
+    background-size: 100% 72%;
+    background-position: 0 80%;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    transition: background-size 0.9s cubic-bezier(0.6, 0, 0.2, 1) 0.35s;
+  }
+
+  /* Chunky "ink stamp" buttons */
+  .btn-ink,
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-plex-mono), monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.2rem;
+    border: 2px solid var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+  .btn-ink {
+    background: var(--hl);
+    color: #1d1f24;
+  }
+  .btn-ghost {
+    background: var(--paper-2);
+    color: var(--ink);
+  }
+  .btn-ink:hover,
+  .btn-ghost:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .btn-ink:active,
+  .btn-ghost:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--ink);
+  }
+
+  /* Sticky notes (events) */
+  .note {
+    position: relative;
+    background: var(--note-bg, var(--note-1));
+    color: var(--note-ink);
+    padding: 2rem 1.35rem 1.35rem;
+    box-shadow:
+      0 1px 1px rgb(0 0 0 / 0.08),
+      0 18px 24px -14px rgb(0 0 0 / 0.45);
+    transform: rotate(var(--tilt, 0deg));
+    transition: transform 0.25s ease;
+  }
+  .note:hover {
+    transform: rotate(0deg) scale(1.025);
+  }
+  .note a {
+    color: var(--note-ink);
+  }
+  .note .label {
+    color: rgb(36 39 45 / 0.7);
+  }
+  .tape {
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    width: 96px;
+    height: 26px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgb(255 255 255 / 0.5);
+    border-inline: 2px dotted rgb(0 0 0 / 0.08);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
+  }
+
+  /* Patent sheet (projects) */
+  .sheet {
+    position: relative;
+    background: var(--paper-2);
+    border: 1.5px solid var(--ink);
+    box-shadow:
+      inset 0 0 0 6px var(--paper-2),
+      inset 0 0 0 7px var(--ink),
+      0 0 0 var(--ink);
+    padding: 1.5rem;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+  .sheet:hover {
+    transform: translate(-4px, -4px);
+    box-shadow:
+      inset 0 0 0 6px var(--paper-2),
+      inset 0 0 0 7px var(--ink),
+      8px 8px 0 var(--ink);
+  }
+  .sheet-figure {
+    position: relative;
+    border: 1px dashed var(--ink-soft);
+    background-image:
+      linear-gradient(var(--grid-major) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-major) 1px, transparent 1px);
+    background-size: 16px 16px;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+  }
+
+  /* Torn-off paper slip (contact, CTA) */
+  .torn {
+    background: var(--paper-2);
+    --z: 12px;
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% /
+      calc(2 * var(--z)) 100%;
+    padding-bottom: calc(var(--z) + 2rem);
+  }
+
+  /* Lined notebook paper (blog) */
+  .lined {
+    background-color: var(--paper-2);
+    background-image: linear-gradient(transparent calc(2rem - 1px), var(--grid-major) 1px);
+    background-size: 100% 2rem;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Sketch -> ink reveal. Elements with .ink start as faint pencil and get
+   inked when they scroll into view (see components/Notebook/Ink.tsx).
+   Only applies when JS is running, so no-JS visitors see everything.
+   --------------------------------------------------------------------- */
+.js .ink {
+  transition:
+    opacity 0.9s ease,
+    filter 0.9s ease,
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.js .ink:not(.is-inked) {
+  opacity: 0.22;
+  filter: grayscale(1) blur(0.6px);
+  transform: translateY(10px);
+}
+.js .ink .hl {
+  transition:
+    background-size 0.9s cubic-bezier(0.6, 0, 0.2, 1) 0.35s,
+    color 0.2s ease 0.5s;
+}
+.js .ink:not(.is-inked) .hl {
+  background-size: 0% 72%;
+  color: inherit;
+}
+
+/* ---------------------------------------------------------------------
+   Self-drawing logo (components/Notebook/DrawnLogo.tsx)
+   --------------------------------------------------------------------- */
+.drawn-logo .letter {
+  fill: currentColor;
+  fill-opacity: 0;
+  stroke: currentColor;
+  stroke-width: 0.55;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation:
+    logo-draw 1.15s cubic-bezier(0.5, 0, 0.3, 1) var(--d, 0s) forwards,
+    logo-fill 0.7s ease calc(var(--d, 0s) + 1s) forwards;
+}
+.drawn-logo .guides {
+  stroke: var(--blueprint);
+  stroke-width: 0.25;
+  stroke-dasharray: 1.5 1.5;
+  opacity: 0;
+  animation: guides 3.6s ease forwards;
+}
+.drawn-logo .dim {
+  fill: var(--blueprint);
+  font-family: var(--font-plex-mono), monospace;
+  font-size: 2.6px;
+  letter-spacing: 0.3px;
+  opacity: 0;
+  animation: guides 3.6s ease 0.2s forwards;
+}
+@keyframes logo-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes logo-fill {
+  to {
+    fill-opacity: 1;
+  }
+}
+@keyframes guides {
+  0% {
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.45;
+  }
+}
+
+/* Hand-drawn strokes (arrows, underlines) draw themselves too */
+.scribble path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: logo-draw 0.9s ease var(--d, 0.4s) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawn-logo .letter,
+  .drawn-logo .guides,
+  .drawn-logo .dim,
+  .scribble path {
+    animation: none;
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+    opacity: 1;
+  }
+  .drawn-logo .guides,
+  .drawn-logo .dim {
+    opacity: 0.45;
+  }
+  .js .ink:not(.is-inked) {
+    opacity: 1;
+    filter: none;
+    transform: none;
+  }
+  .js .ink:not(.is-inked) .hl {
+    background-size: 100% 72%;
+  }
+  .note,
+  .sheet,
+  .btn-ink,
+  .btn-ghost {
+    transition: none;
+  }
+}

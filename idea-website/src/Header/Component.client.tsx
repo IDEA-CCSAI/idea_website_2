@@ -13,7 +13,7 @@ interface HeaderClientProps {
   data: Header
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = () => {
   /* Storing the value in a useState to avoid hydration errors */
   const [theme, setTheme] = useState<string | null>(null)
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
@@ -30,10 +30,14 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-6 flex flex-wrap gap-4 justify-between items-center">
-        <Link href="/">
-          <Logo />
+    <header
+      className="sticky top-0 z-30 border-b-2 border-[var(--ink)] bg-[var(--paper)]/90 backdrop-blur-sm"
+      {...(theme ? { 'data-theme': theme } : {})}
+    >
+      <div className="container py-4 flex flex-wrap gap-x-8 gap-y-3 justify-between items-center">
+        <Link aria-label="IDEA home" className="flex items-center gap-3 group" href="/">
+          <Logo className="h-7 text-[var(--ink)] transition-transform group-hover:-rotate-3" />
+          <span className="label hidden sm:inline">Innovative Developers &amp; Engineers</span>
         </Link>
         <HeaderNav />
       </div>

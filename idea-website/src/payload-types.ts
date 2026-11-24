@@ -785,6 +785,11 @@ export interface Event {
   id: string;
   title: string;
   date: string;
+  /**
+   * Weekly events stay pinned at the top of the Events page.
+   */
+  repeats?: ('once' | 'weekly') | null;
+  schedule?: string | null;
   location?: string | null;
   description?: string | null;
   image?: (string | null) | Media;
@@ -1270,6 +1275,8 @@ export interface PostsSelect<T extends boolean = true> {
 export interface EventsSelect<T extends boolean = true> {
   title?: T;
   date?: T;
+  repeats?: T;
+  schedule?: T;
   location?: T;
   description?: T;
   image?: T;
